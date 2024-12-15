@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3 uid="uid://d2dobbschfmoo"]
+
+[ext_resource type="Texture2D" uid="uid://bhj7xdq5iyn2m" path="res://assets/pexels-francesco-ungaro-998641.jpg" id="2_7kdyb"]
+[ext_resource type="Texture2D" uid="uid://b0p62thvb1kux" path="res://textures/dirt.png" id="2_i5ogn"]
+[ext_resource type="PackedScene" uid="uid://c1hl7ved6c6qv" path="res://cenas/OBJETOS/SEGURAVEIS/grass.tscn" id="4_8la3g"]
+[ext_resource type="PackedScene" uid="uid://07p2s7y8ml1" path="res://cenas/PLAYER/player_testevidro.tscn" id="6_dbcp6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sohxr"]
+albedo_texture = ExtResource("2_i5ogn")
+heightmap_scale = -10.455
+uv1_scale = Vector3(40, 40, 40)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_vs5rs"]
+panorama = ExtResource("2_7kdyb")
+
+[sub_resource type="Sky" id="Sky_xspnf"]
+sky_material = SubResource("PanoramaSkyMaterial_vs5rs")
+
+[sub_resource type="Environment" id="Environment_v2hg4"]
+background_mode = 2
+sky = SubResource("Sky_xspnf")
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.117647, 0.12549, 0.137255, 1)
+fog_density = 0.04
+fog_sky_affect = 0.95
+
+[node name="fase_1" type="Node3D"]
+
+[node name="Light" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.08753, 0)
+omni_range = 28.7761
+
+[node name="static" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.501156, 0)
+use_collision = true
+size = Vector3(40, 1, 40)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.61023, 0)
+use_collision = true
+size = Vector3(40, 1, 40)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9915, -20.2684)
+use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="static/CSGCombiner3D"]
+use_collision = true
+size = Vector3(40, 10, 1)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="static/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.502, 0)
+operation = 2
+use_collision = true
+size = Vector3(4, 3, 1)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9915, 19.8537)
+use_collision = true
+size = Vector3(40, 10, 1)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.2584, 3.98909, 0)
+use_collision = true
+size = Vector3(1, 10, 40)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9761, 3.98909, 0)
+use_collision = true
+size = Vector3(1, 10, 40)
+material = SubResource("StandardMaterial3D_sohxr")
+
+[node name="Obj" type="Node3D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("6_dbcp6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="box1" parent="." instance=ExtResource("4_8la3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.91282, 1.52207, -9.39556)
+
+[node name="box2" parent="." instance=ExtResource("4_8la3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.719443, 1.52207, -9.39556)
+
+[node name="box3" parent="." instance=ExtResource("4_8la3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.61186, 1.52207, -9.39556)
+
+[node name="box4" parent="." instance=ExtResource("4_8la3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.72457, 1.52207, -9.39556)
+
+[node name="EV" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="EV"]
+environment = SubResource("Environment_v2hg4")
+
+[editable path="Player"]
+[editable path="Player/Nek/Head/Eyes/PlayerInteractor"]

@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://ckiex7x2fuph"
+path.s3tc="res://.godot/imported/wip_-_interior_environment_farm_house_11.png-08e7884d18c0160e8762b6e81c4dd51a.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "d40445416e16b817fa04af63139de46a"
+}
+
+[deps]
+
+source_file="res://assets/Modelos/HOUSE/wip_-_interior_environment_farm_house_11.png"
+dest_files=["res://.godot/imported/wip_-_interior_environment_farm_house_11.png-08e7884d18c0160e8762b6e81c4dd51a.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://assets/Modelos/HOUSE/wip_-_interior_environment_farm_house_11.png"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

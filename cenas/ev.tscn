@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dp7wyoqo57o01"]
+
+[ext_resource type="Texture2D" uid="uid://bhj7xdq5iyn2m" path="res://assets/pexels-francesco-ungaro-998641.jpg" id="1_737ae"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_irryj"]
+panorama = ExtResource("1_737ae")
+
+[sub_resource type="Sky" id="Sky_xspnf"]
+sky_material = SubResource("PanoramaSkyMaterial_irryj")
+
+[sub_resource type="Environment" id="Environment_3ucdu"]
+background_mode = 2
+sky = SubResource("Sky_xspnf")
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.117647, 0.12549, 0.137255, 1)
+fog_density = 0.04
+fog_sky_affect = 0.95
+
+[node name="EV" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3ucdu")
