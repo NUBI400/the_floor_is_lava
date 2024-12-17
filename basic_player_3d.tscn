@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://6p5c2qs3e5r"]
+
+[ext_resource type="Script" path="res://basic_player_3d.gd" id="1_j78kr"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ikryl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kjhlv"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_u6nhy"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="basic_player_3d" type="CharacterBody3D"]
+script = ExtResource("1_j78kr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ikryl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_kjhlv")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_u6nhy")

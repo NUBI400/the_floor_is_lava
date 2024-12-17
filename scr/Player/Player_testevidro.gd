@@ -156,12 +156,25 @@ var gravity = 14
 
 
 
+var advance_distance: float = 3.5  # Distância para frente
+var rise_amount: float = 0.8  # Quanto a câmera sobe (positivo) ou desce (negativo)
+var advance_duration: float = 1.0  # Tempo para avançar e subir
+var rotation_duration: float = 1.0  # Tempo para girar 180 graus
+
+var girou = false
+
 var picked_object
 var pull_power = 4
 
 
 var rotation_power = 0.1
 var locked = false
+
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int())
+
+
 
 func _change_state(new_state: PlayerState):
 	if current_state != new_state:
@@ -184,6 +197,9 @@ func _play_animation_for_state(state: PlayerState):
 
 
 func _ready():
+	camera_3d.current = is_multiplayer_authority()
+	
+	
 	#if mirrored:
 		#camera_3d.set_cull_mask_value(2, true)
 		#print(camera_3d.cull_mask)
@@ -202,108 +218,121 @@ func _ready():
 
 
 func _physics_process(delta):
-	
-	if morte:
-		_change_state(PlayerState.DEAD)
-		return
-	else:
-		_change_state(PlayerState.IDLE)
+	if is_multiplayer_authority():
+		if morte:
+			if girou == false:
+				girou = true
+				_change_state(PlayerState.DEAD)
+				animate_camera_on_death()
+			
+		else:
+			_change_state(PlayerState.IDLE)
 
-	#if is_on_floor():
-		#if Input.is_action_pressed("Crouch"):
-			#_change_state(PlayerState.CROUCHING)
-		#elif Input.is_action_pressed("Sprint") and input_dir != Vector2.ZERO:
-			#_change_state(PlayerState.RUNNING)
-		#elif input_dir != Vector2.ZERO:
-			#_change_state(PlayerState.WALKING)
-		#else:
-			#if current_state in [PlayerState.WALKING, PlayerState.RUNNING]:
-				#_change_state(PlayerState.STOP_RUNNING if sprinting else PlayerState.STOP_WALKING)
+		#if is_on_floor():
+			#if Input.is_action_pressed("Crouch"):
+				#_change_state(PlayerState.CROUCHING)
+			#elif Input.is_action_pressed("Sprint") and input_dir != Vector2.ZERO:
+				#_change_state(PlayerState.RUNNING)
+			#elif input_dir != Vector2.ZERO:
+				#_change_state(PlayerState.WALKING)
 			#else:
-				#_change_state(PlayerState.IDLE)
-	#else:
-		#if velocity.y > 0:
-			#_change_state(PlayerState.JUMPING)
-		#elif velocity.y < 0:
-			#_change_state(PlayerState.FALLING)
-	
-	
-	
-	if mirrored == false:
-		if morte == false:
-			input_dir = Input.get_vector("Esquerda", "Direita", "Cima", "Baixo")
-			direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-			if direction:
-				velocity.x += direction.x * current_speed * delta
-				velocity.z += direction.z * current_speed * delta
-			
-			_pick_up()
-			Global.Player_Pos = position
-			health_back()
-			#movementos
-			movement(delta)
-			Crouch_and_slide(delta)
-			jump()
-			
-			gravidade(delta)
-			move_and_slide()
-			update_state()
-			velocity.x *= FRICTION
-			velocity.z *= FRICTION
-		
-		# ENTRAR NO MODO COMPUTADOR
-			#if Input.is_action_just_pressed("action"):
-				#if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-					#mouse_sens = MOUSE_SPEED_INSPECION
+				#if current_state in [PlayerState.WALKING, PlayerState.RUNNING]:
+					#_change_state(PlayerState.STOP_RUNNING if sprinting else PlayerState.STOP_WALKING)
 				#else:
-					#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-					#mouse_sens = MOUSE_SPEED_PADRAO
-			#mouse = Vector2()
-	else:
-		position.y = Mirror_What.get_position().y
-		position.z = Mirror_What.get_position().z
-		position.x = Mirror_What.get_position().x * -1
-		rotation.y = Mirror_What.rotation.y * -1
-		rotation.z = Mirror_What.rotation.z
-		head.rotation.x = Mirror_What.head.rotation.x 
+					#_change_state(PlayerState.IDLE)
+		#else:
+			#if velocity.y > 0:
+				#_change_state(PlayerState.JUMPING)
+			#elif velocity.y < 0:
+				#_change_state(PlayerState.FALLING)
+		
+		
+		
+		if mirrored == false:
+			if morte == false:
+				input_dir = Input.get_vector("Esquerda", "Direita", "Cima", "Baixo")
+				direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+				if direction:
+					velocity.x += direction.x * current_speed * delta
+					velocity.z += direction.z * current_speed * delta
+				
+				_pick_up()
+				Global.Player_Pos = position
+				health_back()
+				#movementos
+				gravidade(delta)
+				movement(delta)
+				Crouch_and_slide(delta)
+				jump()
+				
+				update_state()
+				velocity.x *= FRICTION
+				velocity.z *= FRICTION
+	move_and_slide()
 
 
 
+func animate_camera_on_death():
+	var tween = get_tree().create_tween().set_parallel(true)  # Ativa animações paralelas
+	
+	# Calcula a nova posição da câmera (para frente e para cima/baixo)
+	var forward_direction = -camera_3d.global_transform.basis.z.normalized()
+	var new_position = camera_3d.global_position + forward_direction * advance_distance
+	new_position.y += rise_amount  # Adiciona a subida/descida
+	
+	# Anima a posição (avanço + subida)
+	tween.tween_property(camera_3d, "global_position", new_position, advance_duration)
+	
+	# Configura a rotação (vira 180 graus no eixo Y)
+	var new_rotation = camera_3d.rotation_degrees
+	new_rotation.y += 180  # Rotação de 180 graus no eixo Y
+	new_rotation.x = -20   
+	# Anima a rotação separadamente
+	tween.tween_property(camera_3d, "rotation_degrees", new_rotation, rotation_duration)
+	
+	
 func _input(event):
 	
-	if !locked:
-		if mirrored == false:
-			if event is InputEventMouseMotion:
-				mouse = event.relative
-				rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
-				head.rotate_x(deg_to_rad(-event.relative.y* mouse_sens))
-				head.rotation.x = clamp(head.rotation.x,deg_to_rad(-80),deg_to_rad(90))
-	
-	
-	if Input.is_action_just_pressed("action"):
-		if picked_object == null:
-			pick_object()
+	if is_multiplayer_authority():
+		if morte:
+			return
 		
-	if Input.is_action_just_released("action"):
-		remove_object()
+		if Input.is_action_just_pressed("quit"):
+			$"../".exit_game(name.to_int())
+			get_tree().quit()
 		
-	if Input.is_action_pressed("Reload"):
-		locked = true
-		rotate_object(event)
+		if !locked:
+			if mirrored == false:
+				if event is InputEventMouseMotion:
+					mouse = event.relative
+					rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
+					head.rotate_x(deg_to_rad(-event.relative.y* mouse_sens))
+					head.rotation.x = clamp(head.rotation.x,deg_to_rad(-80),deg_to_rad(90))
 		
-	if Input.is_action_just_released("Reload"):
-		locked = false
-	
-	if Input.is_action_just_pressed("mouse2"):
-		if picked_object != null:
-			var knockback = picked_object.global_position - global_position
-			picked_object.apply_central_impulse(knockback * 5)
+		
+		if Input.is_action_just_pressed("action"):
+			if picked_object == null:
+				pick_object()
+			
+		if Input.is_action_just_released("action"):
 			remove_object()
-	
-	if Input.is_action_just_pressed("Melee"):
-		_statick_object()
-
+			
+		if Input.is_action_pressed("Reload"):
+			locked = true
+			rotate_object(event)
+			
+		if Input.is_action_just_released("Reload"):
+			locked = false
+		
+		if Input.is_action_just_pressed("mouse2"):
+			if picked_object != null:
+				var knockback = picked_object.global_position - global_position
+				picked_object.apply_central_impulse(knockback * 5)
+				remove_object()
+		
+		if Input.is_action_just_pressed("Melee"):
+			_statick_object()
+		
 
 func movement(delta):
 	
@@ -421,6 +450,9 @@ func health_back():
 
 
 func _on_area_dead_area_entered(area):
+	if area.is_in_group("LAVA_MORTAL_GAIMER"):
+		morte = true
+	
 	if area.is_in_group("damage"):
 		Global.health_player -= 1
 		if Global.health_player <= 0:

@@ -14,7 +14,6 @@ sky = SubResource("Sky_xspnf")
 tonemap_mode = 2
 fog_enabled = true
 fog_light_color = Color(0.117647, 0.12549, 0.137255, 1)
-fog_density = 0.04
 fog_sky_affect = 0.95
 
 [node name="EV" type="Node3D"]

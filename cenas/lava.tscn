@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://c0ga1fubc7f0k"]
+
+[ext_resource type="Script" path="res://scr/OBJETOS/lava.gd" id="1_jk3aq"]
+
+[sub_resource type="Gradient" id="Gradient_hbkef"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.350746, 0.58209, 0.828358, 1)
+colors = PackedColorArray(0.474797, 1.11302e-06, 3.60981e-07, 1, 0.599056, 3.65794e-06, 6.73831e-07, 1, 0.757586, 0.326576, 0, 1, 0.764238, 0.838147, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_q2nq3"]
+frequency = 0.004
+offset = Vector3(0, 22124, 4424.76)
+fractal_type = 3
+fractal_octaves = 2
+fractal_lacunarity = 1.4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l2tkd"]
+seamless = true
+color_ramp = SubResource("Gradient_hbkef")
+noise = SubResource("FastNoiseLite_q2nq3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npus3"]
+albedo_texture = SubResource("NoiseTexture2D_l2tkd")
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 0.02
+uv1_scale = Vector3(15, 15, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ug32i"]
+size = Vector3(100, 1, 100)
+
+[node name="Lava" type="Node3D"]
+script = ExtResource("1_jk3aq")
+speed = Vector3(0, 50, 10)
+speed_multiplier = 2.0
+
+[node name="texture_csg" type="CSGBox3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_npus3")
+
+[node name="Area3D" type="Area3D" parent="." groups=["LAVA_MORTAL_GAIMER"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_ug32i")
