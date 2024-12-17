@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://rejugoliw6te"]
+[gd_scene load_steps=10 format=4 uid="uid://rejugoliw6te"]
 
 [ext_resource type="Script" path="res://scr/OBJETOS/fisica_target.gd" id="1_j8s8s"]
 [ext_resource type="Material" uid="uid://j6b6uf4g3qnq" path="res://Material/shaders_scrs/outline/outline.tres" id="2_pi2s1"]
@@ -52,6 +52,14 @@ radius = 0.262346
 height = 0.815649
 radius = 0.102138
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rwy2b"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="garrafa" type="RigidBody3D" groups=["Target"]]
 collision_layer = 8
 collision_mask = 43
@@ -78,6 +86,9 @@ collision_mask = 16
 
 [node name="CollisionShape3D" parent="Interactable" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000389323, 0.00230824, 0.84835)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_rwy2b")
 
 [connection signal="focused" from="Interactable" to="." method="_on_interactable_focused"]
 [connection signal="interacted" from="Interactable" to="." method="_on_interactable_interacted"]

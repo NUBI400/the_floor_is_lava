@@ -1770,6 +1770,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Nek/Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("Nek/Head/Eyes/Camera3D/joint:node_b")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
