@@ -1,14 +1,20 @@
-This is a test project where I learned how to make and use a relatively complex weapons system. I was inspired by COD zombies when I came up with the idea of ​​making this project.  
-It is a wave game with zombies on a CS1.6 map.  
-It contains 3 purchasable weapons near the spawn, one of which is the starting pistol and a purchasable medkit.  
+This project was a test of many things that I found interesting, I thought it would be cool to put them together and turn them into a silly game.
+
+"the flower is lava" is literally a floor and lava in a giant house xd.
+
+When you enter the game, click on the HOST option, it has this because I tried to make a LAN multiplayer system that works, but the guest player is not able to interact correctly with the objects, which makes it unplayable.
+
 
 Controls: 
 W A S D = walk 
-left mouse = shoot 
-right mouse = aim 
 shift = run 
 ctrl = crouch 
 space = jump 
-E = interact  
+
+left mouse = grab object
+right mouse = throw
+F = leave object static
+R = rotate object
+
 
 Made in Godot in 2024.
